@@ -42,7 +42,7 @@ struct CatalogView: View {
                                             .foregroundColor(.miniText)
                                             .fontWeight(.light)
                                             .lineLimit(10)
-                                        Text("$\(String(format: "%.2f", coffee.price))")
+                                        Text("\(fetchLocalCurrency())\(String(format: "%.2f", coffee.price))")
                                             .font(.title3)
                                             .fontWeight(.bold)
                                             .foregroundColor(.white)

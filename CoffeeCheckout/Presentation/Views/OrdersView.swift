@@ -1,10 +1,3 @@
-//
-//  OrdersView.swift
-//  CoffeeCheckout
-//
-//  Created by Vlad Alex Barbatescu on 09/09/2025.
-//
-
 import SwiftUI
 
 struct OrdersView: View {
