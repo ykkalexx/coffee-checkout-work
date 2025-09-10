@@ -1,5 +1,6 @@
 import SwiftUI
 
+
 struct CatalogView: View {
     @StateObject private var viewModel = CatalogViewModel()
     @EnvironmentObject var basketManager: BasketManagement
@@ -47,7 +48,9 @@ struct CatalogView: View {
                                             .fontWeight(.bold)
                                             .foregroundColor(.white)
                                     }
+                                    
                                     Spacer()
+                                    
                                     Button(action: {
                                         basketManager.addCoffeeToBasket(coffee)
                                         showingConfirmation = true
@@ -61,6 +64,7 @@ struct CatalogView: View {
                                             .frame(width: 40, height: 40)
                                             .foregroundColor(Color.orange)
                                     }
+                                    
                                 }
                             }
                             .frame(maxWidth: 450)
@@ -70,6 +74,7 @@ struct CatalogView: View {
                     }
                 }
             }.padding()
+            
             Spacer()
         }
         .background(Color.mainBg)

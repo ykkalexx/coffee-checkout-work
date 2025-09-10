@@ -1,7 +1,5 @@
 import SwiftUI
 
-import SwiftUI
-
 struct MainTabView: View {
     @State private var selectedTab: Tab = .menu
     
@@ -12,12 +10,14 @@ struct MainTabView: View {
                     Label("Menu", systemImage: "list.bullet")
                 }
                 .tag(Tab.menu)
-            
-            BasketView()
-                .tabItem {
-                    Label("Basket", systemImage: "basket.fill")
-                }
-                .tag(Tab.basket)
+    
+            NavigationStack {
+                BasketView()
+            }
+            .tabItem {
+                Label("Basket", systemImage: "basket.fill")
+            }
+            .tag(Tab.basket)
             
             OrdersView()
                 .tabItem {
@@ -33,4 +33,3 @@ struct MainTabView: View {
     MainTabView()
         .environmentObject(BasketManagement())
 }
-

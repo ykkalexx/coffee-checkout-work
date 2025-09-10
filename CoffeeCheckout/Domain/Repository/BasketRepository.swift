@@ -10,4 +10,5 @@ protocol BasketRepository: ObservableObject {
     func fetchBasketItems() -> [BasketItem]
     func decreaseQuanityOfItem(_ item: Coffee) -> Void
     func fetchTotalQuanity() -> Int
+    func emptyBasket() -> Void
 }
