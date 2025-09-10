@@ -4,12 +4,17 @@ import Combine
 class CheckoutViewModel: ObservableObject {
     @Published var paymentMethods: [PaymentMethod] = []
     @Published var selectedPaymentMethodId: String?
+    @Published var showingBottomSheet: Bool = false
+    
+    @Published var isPaymentSuccessful: Bool = false
+    private let paymentRepository: PaymentRepository
     
     let title = "Select Payment Method"
     let alternativePaymentText = "Or Pay Using"
     let continueButtonText = "Continue"
 
-    init() {
+    init(paymentRepository: PaymentRepository = MockPaymentRepository()) {
+        self.paymentRepository = paymentRepository
         loadPaymentMethods()
         selectedPaymentMethodId = paymentMethods.first?.id
     }
@@ -22,14 +27,37 @@ class CheckoutViewModel: ObservableObject {
         print("Apple Pay button tapped. Initiating payment...")
     }
     
-    func continueToNextStep() {
+    func processPayment() async {
         guard let selectedId = selectedPaymentMethodId else {
             print("Error: No payment method is selected.")
             return
         }
-        print("Continuing checkout with payment method: \(selectedId)")
-    }
         
+        do {
+            let success = try await paymentRepository.handlePayment()
+            
+            await MainActor.run {
+                self.isPaymentSuccessful = success
+                
+                if success {
+                    self.continueToNextStep()
+                } else {
+                    print("Payment failed.")
+                }
+            }
+        } catch {
+            print("Failed to process payment: \(error.localizedDescription)")
+            await MainActor.run {
+                self.isPaymentSuccessful = false
+            }
+        }
+    }
+    
+    
+    func continueToNextStep() {
+        showingBottomSheet = true
+    }
+          
     private func loadPaymentMethods() {
         paymentMethods = [
             PaymentMethod(id: "debit", name: "Debit Card", imageName: "creditcard.fill"),
