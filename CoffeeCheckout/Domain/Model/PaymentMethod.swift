@@ -1,10 +1,4 @@
-//
-//  PaymentMethod.swift
-//  CoffeeCheckout
-//
-//  Created by Vlad Alex Barbatescu on 10/09/2025.
-//
-
+import Foundation
 
 struct PaymentMethod: Identifiable {
     let id: String

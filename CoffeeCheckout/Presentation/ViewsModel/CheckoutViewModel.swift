@@ -5,7 +5,6 @@ class CheckoutViewModel: ObservableObject {
     @Published var paymentMethods: [PaymentMethod] = []
     @Published var selectedPaymentMethodId: String?
     @Published var showingBottomSheet: Bool = false
-    
     @Published var isPaymentSuccessful: Bool = false
     private let paymentRepository: PaymentRepository
     

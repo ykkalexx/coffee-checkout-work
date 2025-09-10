@@ -1,5 +1,11 @@
 import SwiftUI
 
+enum Tab {
+    case menu
+    case basket
+    case orders
+}
+
 struct MainTabView: View {
     @State private var selectedTab: Tab = .menu
     
