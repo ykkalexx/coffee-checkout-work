@@ -74,6 +74,7 @@ struct BasketView: View {
                     }
                     .frame(height: 100)
                     .padding()
+                    .padding(.bottom, 15)
                 }
             }
             
@@ -117,12 +118,13 @@ struct BasketView: View {
             .cornerRadius(20)
             .padding()
             
-            BasketButton(action: {
-                basketManager.emptyBasket()
-            }) {
-                Text("Proceed to Checkout")
-            }.disabled(basketManager.basketItems.isEmpty)
-            
+            NavigationLink(destination: CheckoutView()) {
+                BasketButton(action: {
+                    print("going to checkout")
+                }) {
+                    Text("Proceed to Checkout")
+                }.disabled(basketManager.basketItems.isEmpty)
+            }
             Spacer()
         }
         .background(Color.mainBg)
