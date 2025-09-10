@@ -47,4 +47,8 @@ class BasketManagement: BasketRepository, ObservableObject {
     func fetchTotalQuanity() -> Int {
         return basketItems.reduce(0) { $0 + $1.quantity }
     }
+    
+    func emptyBasket() -> Void {
+        basketItems.removeAll()
+    }
 }

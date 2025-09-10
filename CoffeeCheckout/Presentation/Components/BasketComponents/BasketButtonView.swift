@@ -6,7 +6,7 @@ struct BasketButtonView: View {
     
     var body: some View {
         Button(action: {
-            print("Basket button tapped!")
+           
         }) {
             ZStack(alignment: .topTrailing) {
                 Image(systemName: "basket")

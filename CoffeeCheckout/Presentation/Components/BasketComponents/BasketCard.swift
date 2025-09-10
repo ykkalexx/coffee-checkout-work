@@ -18,8 +18,6 @@ struct BasketCard<Content: View>: View {
                 content
                 
                 Spacer()
-                
-                QuantityButton(quantity: $itemQuantity)
             }
             .padding(16)
         }
