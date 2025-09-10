@@ -11,8 +11,11 @@ struct CardView<Content: View>: View {
         ZStack {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.cardC)
-            content
-                .padding(16)
+            
+            HStack {
+                content
+            }
+            .padding(16) 
         }
     }
 }

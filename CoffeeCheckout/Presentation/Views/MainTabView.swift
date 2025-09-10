@@ -31,5 +31,6 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environmentObject(BasketManagement())
 }
 

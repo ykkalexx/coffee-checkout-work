@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CatalogView: View {
     @StateObject private var viewModel = CatalogViewModel()
+    @EnvironmentObject var basketManager: BasketManagement
+    @State private var showingConfirmation = false
     
     var body: some View {
         VStack {
@@ -12,9 +14,7 @@ struct CatalogView: View {
                     .foregroundColor(.white)
                 Spacer()
                 
-                Image(systemName: "basket")
-                    .font(.title3)
-                    .foregroundColor(.white)
+                BasketButtonView(basketManager: basketManager)
             }
             .padding()
             
@@ -48,6 +48,19 @@ struct CatalogView: View {
                                             .foregroundColor(.white)
                                     }
                                     Spacer()
+                                    Button(action: {
+                                        basketManager.addCoffeeToBasket(coffee)
+                                        showingConfirmation = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                            showingConfirmation = false
+                                        }
+                                    }) {
+                                        Image(systemName: "plus.circle.fill")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 40, height: 40)
+                                            .foregroundColor(Color.orange)
+                                    }
                                 }
                             }
                             .frame(maxWidth: 450)
@@ -68,4 +81,5 @@ struct CatalogView: View {
 
 #Preview {
     CatalogView()
+        .environmentObject(BasketManagement())
 }
