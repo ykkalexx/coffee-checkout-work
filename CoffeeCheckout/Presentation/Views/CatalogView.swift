@@ -81,7 +81,6 @@ private extension CatalogView {
 }
 
 private extension CatalogView {
-    
     func handleAddToBasket(_ coffee: Coffee) {
         viewModel.addToBasket(coffee: coffee)
         showingConfirmation = true

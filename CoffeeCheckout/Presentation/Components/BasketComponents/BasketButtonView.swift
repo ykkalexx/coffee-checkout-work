@@ -24,5 +24,3 @@ struct BasketButtonStyle: ButtonStyle {
         .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
 }
-
-
