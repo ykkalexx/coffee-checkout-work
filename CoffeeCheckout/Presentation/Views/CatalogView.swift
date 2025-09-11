@@ -16,7 +16,12 @@ struct CatalogView: View {
                     .foregroundColor(.white)
                 Spacer()
 
-                BasketButtonView(quantity: basketViewModel.totalQuantity)
+                Button(action: {
+                    print("meow")
+                }) {
+                    Text("")
+                }.buttonStyle(BasketButtonStyle(quantity: basketViewModel.totalQuantity))
+            
             }
             .padding()
             
