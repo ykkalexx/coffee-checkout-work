@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-struct BottomSheetView: View {
+struct BottomSheetPaymentFailed: View {
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: "checkmark.circle.fill")
+            Image(systemName: "xmark.circle.fill")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 50, height: 50)
-                .foregroundColor(Color.green)
+                .foregroundColor(Color.red)
 
-            Text("Payment Success!")
+            Text("Payment Failed!")
                 .font(.title)
                 .fontWeight(.bold)
-                .foregroundColor(Color.green)
+                .foregroundColor(Color.red)
 
-            Text("Your order has been placed successfully.")
+            Text("Something went wrong. Try again later.")
                 .font(.body)
                 .foregroundColor(Color.miniText)
                 .multilineTextAlignment(.center)

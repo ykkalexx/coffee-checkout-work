@@ -8,6 +8,7 @@ struct CatalogView: View {
     
     var body: some View {
         VStack {
+            
             HStack {
                 Text("Menu")
                     .font(.title)

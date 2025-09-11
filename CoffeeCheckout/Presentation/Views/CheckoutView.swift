@@ -34,7 +34,11 @@ struct CheckoutView: View {
             
             Spacer()
 
-            OrangeButton(action: viewModel.continueToNextStep) {
+            OrangeButton(action: {
+                Task {
+                    await viewModel.processPayment()
+                }
+            }) {
                 Text(viewModel.continueButtonText)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -45,6 +49,10 @@ struct CheckoutView: View {
         .background(Color.mainBg)
         .sheet(isPresented: $viewModel.showingBottomSheet) {
             BottomSheetView()
+                .presentationDetents([.height(200),])
+        }
+        .sheet(isPresented: $viewModel.showFailedPayment ) {
+            BottomSheetPaymentFailed()
                 .presentationDetents([.height(200),])
         }
     }
