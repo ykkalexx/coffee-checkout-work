@@ -43,6 +43,10 @@ struct CheckoutView: View {
         }
         .padding()
         .background(Color.mainBg)
+        .sheet(isPresented: $viewModel.showingBottomSheet) {
+            BottomSheetView()
+                .presentationDetents([.height(200),])
+        }
     }
 }
 

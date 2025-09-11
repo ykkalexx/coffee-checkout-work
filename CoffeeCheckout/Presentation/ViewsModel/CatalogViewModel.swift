@@ -6,10 +6,19 @@ class CatalogViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var error: String?
     
-    private let repository: CoffeeRepository
+    private let coffeeRepository: CoffeeRepository
+    private let addCoffeeToBasket: AddCoffeeToBasketUseCase
     
-    init(repository: CoffeeRepository = MockCoffeeRepository()) {
-        self.repository = repository
+    init(
+        coffeeRepository: CoffeeRepository,
+        addCoffeeToBasketUseCase: AddCoffeeToBasketUseCase
+    ) {
+        self.coffeeRepository = coffeeRepository
+        self.addCoffeeToBasket = addCoffeeToBasketUseCase
+    }
+    
+    func addToBasket(coffee: Coffee) {
+        addCoffeeToBasket(coffee)
     }
     
     @MainActor
@@ -18,12 +27,11 @@ class CatalogViewModel: ObservableObject {
         error = nil
         
         do {
-            self.coffees = try await repository.fetchAllCoffees()
+            self.coffees = try await coffeeRepository.fetchAllCoffees()
         } catch {
             self.error = "Failed to fetch coffees: \(error.localizedDescription)"
         }
         
         isLoading = false
     }
-    
 }
