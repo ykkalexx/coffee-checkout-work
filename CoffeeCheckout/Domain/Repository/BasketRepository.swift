@@ -1,14 +1,12 @@
 import Foundation
+import Combine
 
-protocol BasketRepository: ObservableObject {
-    var subtotal: Double { get }
-    var deliveryFee: Double { get }
-    var total: Double { get }
+protocol BasketRepository {
+    var itemsPublisher: AnyPublisher<[BasketItem], Never> { get }
     
-    func addCoffeeToBasket(_ item: Coffee) -> Void
-    func removeItemFromBasket(_ item: Coffee) -> Void
-    func fetchBasketItems() -> [BasketItem]
-    func decreaseQuanityOfItem(_ item: Coffee) -> Void
-    func fetchTotalQuanity() -> Int
-    func emptyBasket() -> Void
+    func getItems() -> [BasketItem]
+    func save(item: BasketItem)
+    func delete(item: BasketItem)
+    func clearBasket()
 }
+

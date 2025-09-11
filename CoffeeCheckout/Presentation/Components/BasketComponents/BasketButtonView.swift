@@ -1,30 +1,34 @@
 import SwiftUI
 
-
 struct BasketButtonView: View {
-    @ObservedObject var basketManager: BasketManagement
+    let quantity: Int
     
     var body: some View {
-        Button(action: {
-           
-        }) {
-            ZStack(alignment: .topTrailing) {
-                Image(systemName: "basket")
-                    .font(.title3)
+        ZStack(alignment: .topTrailing) {
+            Image(systemName: "basket.fill")
+                .font(.title2)
+                .foregroundColor(.white)
+            
+            if quantity > 0 {
+                Text("\(quantity)")
+                    .font(.caption2)
+                    .bold()
+                    .frame(width: 18, height: 18)
+                    .background(Color.orange)
                     .foregroundColor(.white)
-                    .padding(5)
-                
-                if basketManager.fetchTotalQuanity() > 0 {
-                    Text("\(basketManager.fetchTotalQuanity())")
-                        .font(.caption2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .padding(5)
-                        .background(Color.orange)
-                        .clipShape(Circle())
-                        .offset(x: 10, y: -10)
-                }
+                    .clipShape(Circle())
+                    .offset(x: 10, y: -10)
             }
         }
     }
+}
+
+#Preview {
+    VStack(spacing: 30) {
+        BasketButtonView(quantity: 0)
+        
+        BasketButtonView(quantity: 5)
+    }
+    .padding()
+    .background(Color.mainBg)
 }
