@@ -15,13 +15,13 @@ struct CatalogView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 Spacer()
-
+                
                 Button(action: {
                     print("meow")
                 }) {
                     Text("")
                 }.buttonStyle(BasketButtonStyle(quantity: basketViewModel.totalQuantity))
-            
+                
             }
             .padding()
             
@@ -35,43 +35,21 @@ struct CatalogView: View {
                         .padding()
                 } else {
                     ForEach(viewModel.coffees) { coffee in
-                        CardView {
-                            HStack(spacing: 20) {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text(coffee.name)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                    Text(coffee.desc)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.gray)
-                                        .lineLimit(2)
-                                    Text("€\(String(format: "%.2f", coffee.price))")
-                                        .font(.headline)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                }
+                        CardView(
+                            title: coffee.name,
+                            description: coffee.desc,
+                            price: "€\(String(format: "%.2f", coffee.price))",
+                            action: {
+                                viewModel.addToBasket(coffee: coffee)
                                 
-                                Spacer()
-                                
-                                Button(action: {
-                                    viewModel.addToBasket(coffee: coffee)
-                                    
-                                    showingConfirmation = true
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                        showingConfirmation = false
-                                    }
-                                }) {
-                                    Image(systemName: "plus.circle.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(Color.orange)
+                                showingConfirmation = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                    showingConfirmation = false
                                 }
                             }
-                        }
+                        )
                         .padding(.horizontal)
-                        .padding(.vertical, 4)
+                        .padding(.vertical, 15)
                     }
                 }
             }
@@ -94,20 +72,4 @@ struct CatalogView: View {
                 .animation(.easeInOut, value: showingConfirmation)
         )
     }
-}
-
-#Preview {
-    let basketRepo = InMemoryBasketRepository()
-    let coffeeRepo = MockCoffeeRepository()
-    let addCoffeeUseCase = AddCoffeeToBasketUseCase(repository: basketRepo)
-    
-    let catalogVM = CatalogViewModel(
-        coffeeRepository: coffeeRepo,
-        addCoffeeToBasketUseCase: addCoffeeUseCase
-    )
-    let basketVM = BasketViewModel(repository: basketRepo)
-    
-    return CatalogView()
-        .environmentObject(catalogVM)
-        .environmentObject(basketVM)
 }
