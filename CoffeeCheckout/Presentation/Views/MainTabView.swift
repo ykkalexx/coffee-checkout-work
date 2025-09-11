@@ -21,6 +21,12 @@ struct MainTabView: View {
         
         _basketViewModel = StateObject(wrappedValue: basketVM)
         _catalogViewModel = StateObject(wrappedValue: catalogVM)
+        
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor.cardC
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     var body: some View {
@@ -28,10 +34,8 @@ struct MainTabView: View {
             CatalogView()
                 .tabItem {
                     Label("Menu", systemImage: "list.bullet")
-                        .foregroundColor(Color.orange)
                 }
                 .tag(Tab.menu)
-                .background(Color.orange)
     
             NavigationStack {
                 BasketView(viewModel: basketViewModel)
@@ -41,7 +45,13 @@ struct MainTabView: View {
             }
             .tag(Tab.basket)
             
+            Text("Orders")
+                .tabItem {
+                    Label("Orders", systemImage: "clock.fill")
+                }
+                .tag(Tab.orders)
         }
+        .tint(.orange)
         .environmentObject(catalogViewModel)
         .environmentObject(basketViewModel)
     }
@@ -50,3 +60,4 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
 }
+

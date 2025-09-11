@@ -69,6 +69,9 @@ struct CatalogView: View {
                     }
                 }
             }
+            
+            Spacer()
+            Spacer()
         }
         .background(Color.mainBg.ignoresSafeArea())
         .task {

@@ -7,6 +7,7 @@
 
 class MockPaymentRepository: PaymentRepository {
     func handlePayment() async throws -> Bool {
-        return true
+        let randomBool = Bool.random()
+        return randomBool
     }
 }
