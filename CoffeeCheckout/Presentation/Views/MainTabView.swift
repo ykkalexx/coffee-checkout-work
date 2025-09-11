@@ -44,12 +44,6 @@ struct MainTabView: View {
                 Label("Basket", systemImage: "basket.fill")
             }
             .tag(Tab.basket)
-            
-            Text("Orders")
-                .tabItem {
-                    Label("Orders", systemImage: "clock.fill")
-                }
-                .tag(Tab.orders)
         }
         .tint(.orange)
         .environmentObject(catalogViewModel)

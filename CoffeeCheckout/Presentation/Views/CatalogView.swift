@@ -8,70 +8,8 @@ struct CatalogView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("Menu")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                Spacer()
-
-                BasketButtonView(quantity: basketViewModel.totalQuantity)
-            }
-            .padding()
-            
-            ScrollView {
-                if viewModel.isLoading {
-                    ProgressView("Loading...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                } else if let error = viewModel.error {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .padding()
-                } else {
-                    ForEach(viewModel.coffees) { coffee in
-                        CardView {
-                            HStack(spacing: 20) {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    Text(coffee.name)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                    Text(coffee.desc)
-                                        .font(.subheadline)
-                                        .foregroundColor(Color.gray)
-                                        .lineLimit(2)
-                                    Text("€\(String(format: "%.2f", coffee.price))")
-                                        .font(.headline)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                }
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    viewModel.addToBasket(coffee: coffee)
-                                    
-                                    showingConfirmation = true
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                        showingConfirmation = false
-                                    }
-                                }) {
-                                    Image(systemName: "plus.circle.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(Color.orange)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                    }
-                }
-            }
-            
-            Spacer()
-            Spacer()
+            headerView
+            contentView
         }
         .background(Color.mainBg.ignoresSafeArea())
         .task {
@@ -79,29 +17,75 @@ struct CatalogView: View {
                 await viewModel.fetchCoffee()
             }
         }
-        .overlay(
-            Text("Added to Basket!")
-                .padding()
-                .background(.ultraThinMaterial)
-                .cornerRadius(10)
-                .opacity(showingConfirmation ? 1 : 0)
-                .animation(.easeInOut, value: showingConfirmation)
-        )
+        .overlay(confirmationOverlay)
     }
 }
 
-#Preview {
-    let basketRepo = InMemoryBasketRepository()
-    let coffeeRepo = MockCoffeeRepository()
-    let addCoffeeUseCase = AddCoffeeToBasketUseCase(repository: basketRepo)
+private extension CatalogView {
+    var headerView: some View {
+        HStack {
+            Text("Menu")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+            
+            Spacer()
+            
+            Button(action: {
+                print("Basket button tapped")
+            }) {
+                Text("")
+            }
+            .buttonStyle(BasketButtonStyle(quantity: basketViewModel.totalQuantity))
+        }
+        .padding()
+    }
+
+    var contentView: some View {
+        ScrollView {
+            coffeeList
+        }
+    }
     
-    let catalogVM = CatalogViewModel(
-        coffeeRepository: coffeeRepo,
-        addCoffeeToBasketUseCase: addCoffeeUseCase
-    )
-    let basketVM = BasketViewModel(repository: basketRepo)
+    @ViewBuilder
+    var coffeeList: some View {
+        if viewModel.isLoading {
+            ProgressView("Loading...")
+                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+        } else if let error = viewModel.error {
+            Text(error)
+                .foregroundColor(.red)
+                .padding()
+        } else {
+            ForEach(viewModel.coffees) { coffee in
+                CardView(
+                    title: coffee.name,
+                    description: coffee.desc,
+                    price: "€\(String(format: "%.2f", coffee.price))",
+                    action: { handleAddToBasket(coffee) }
+                )
+                .padding(.horizontal)
+                .padding(.vertical, 15)
+            }
+        }
+    }
     
-    return CatalogView()
-        .environmentObject(catalogVM)
-        .environmentObject(basketVM)
+    var confirmationOverlay: some View {
+        Text("Added to Basket!")
+            .padding()
+            .background(.ultraThinMaterial)
+            .cornerRadius(10)
+            .opacity(showingConfirmation ? 1 : 0)
+            .animation(.easeInOut, value: showingConfirmation)
+    }
+}
+
+private extension CatalogView {
+    func handleAddToBasket(_ coffee: Coffee) {
+        viewModel.addToBasket(coffee: coffee)
+        showingConfirmation = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            showingConfirmation = false
+        }
+    }
 }

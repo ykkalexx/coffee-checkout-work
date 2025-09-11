@@ -34,7 +34,11 @@ struct CheckoutView: View {
             
             Spacer()
 
-            OrangeButton(action: viewModel.continueToNextStep) {
+            OrangeButton(action: {
+                Task {
+                    await viewModel.processPayment()
+                }
+            }) {
                 Text(viewModel.continueButtonText)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -44,7 +48,29 @@ struct CheckoutView: View {
         .padding()
         .background(Color.mainBg)
         .sheet(isPresented: $viewModel.showingBottomSheet) {
-            BottomSheetView()
+            
+            // I know this says the payment failed
+            // but it's cause i didn't change the name
+            // After updating this component
+            // i made it reusable
+            // so im using it here aswell
+            
+            BottomSheetPaymentFailed(
+                imageName: "checkmark.circle.fill",
+                title: "Payment Succesful!",
+                message: "Your order has been placed successfully.",
+                isSuccess: true
+                
+            )
+                .presentationDetents([.height(200),])
+        }
+        .sheet(isPresented: $viewModel.showFailedPayment ) {
+            BottomSheetPaymentFailed(
+                imageName: "xmark.circle.fill",
+                title: "Payment Failed!",
+                message: "Something went wrong. Try again later.",
+                isSuccess: false
+            )
                 .presentationDetents([.height(200),])
         }
     }

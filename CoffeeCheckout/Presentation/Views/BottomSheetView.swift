@@ -29,7 +29,7 @@ struct BottomSheetView: View {
         .padding(.vertical, 40)
         .padding(.horizontal)
         .frame(maxWidth: .infinity)
-        .background(Color.cardC)
+        .background(Color.cardC.ignoresSafeArea())
     }
 }
 

@@ -7,6 +7,7 @@ class CheckoutViewModel: ObservableObject {
     @Published var showingBottomSheet: Bool = false
     @Published var isPaymentSuccessful: Bool = false
     private let paymentRepository: PaymentRepository
+    @Published var showFailedPayment: Bool = false
     
     let title = "Select Payment Method"
     let alternativePaymentText = "Or Pay Using"
@@ -35,20 +36,16 @@ class CheckoutViewModel: ObservableObject {
         do {
             let success = try await paymentRepository.handlePayment()
             
-            await MainActor.run {
-                self.isPaymentSuccessful = success
-                
+            await MainActor.run {                
                 if success {
                     self.continueToNextStep()
                 } else {
                     print("Payment failed.")
+                    self.showFailedPayment = true
                 }
             }
         } catch {
-            print("Failed to process payment: \(error.localizedDescription)")
-            await MainActor.run {
-                self.isPaymentSuccessful = false
-            }
+            print("Failed to process payment: \(error.localizedDescription)")    
         }
     }
     
