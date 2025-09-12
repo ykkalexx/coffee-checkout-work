@@ -1,25 +1,65 @@
 import SwiftUI
 
-struct BasketCard<Content: View>: View {
-    @State private var itemQuantity: Int = 1
+struct BasketCard: View {
+    let imageName: String
+    let title: String
+    let price: String
+    let quantity: Int
     
-    let content: Content
+    let onDecrement: () -> Void
+    let onIncrement: () -> Void
+
+    var body: some View {
+        HStack(spacing: 20) {
+            
+            VStack(alignment: .leading, spacing: 8) {
+                titleView
+                priceView
+            }
+
+            Spacer()
+
+            quantityControlView
+        }
+        .padding()
+    }
+}
+
+
+private extension BasketCard {
     
-    init(@ViewBuilder content: () -> Content) {
-        self.content = content()
+    var titleView: some View {
+        Text(title)
+            .font(.title3)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
     }
     
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color.cardC)
-                
-            HStack {
-                content
-                
-                Spacer()
+    var priceView: some View {
+        Text(price)
+            .font(.headline)
+            .foregroundColor(.miniText)
+    }
+    
+    var quantityControlView: some View {
+        HStack(spacing: 15) {
+            Button(action: onDecrement) {
+                Image(systemName: "minus.circle.fill")
             }
-            .padding(16)
+            .disabled(quantity <= 0)
+
+            Text("\(quantity)")
+                .font(.title3)
+                .fontWeight(.bold)
+                .frame(minWidth: 25)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.white)
+
+            Button(action: onIncrement) {
+                Image(systemName: "plus.circle.fill")
+            }
         }
+        .font(.title2)
+        .foregroundColor(.orange)
     }
 }

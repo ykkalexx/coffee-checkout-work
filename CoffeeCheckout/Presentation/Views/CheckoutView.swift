@@ -49,13 +49,7 @@ struct CheckoutView: View {
         .background(Color.mainBg)
         .sheet(isPresented: $viewModel.showingBottomSheet) {
             
-            // I know this says the payment failed
-            // but it's cause i didn't change the name
-            // After updating this component
-            // i made it reusable
-            // so im using it here aswell
-            
-            BottomSheetPaymentFailed(
+            BottomSheetPayment(
                 imageName: "checkmark.circle.fill",
                 title: "Payment Succesful!",
                 message: "Your order has been placed successfully.",
@@ -65,7 +59,7 @@ struct CheckoutView: View {
                 .presentationDetents([.height(200),])
         }
         .sheet(isPresented: $viewModel.showFailedPayment ) {
-            BottomSheetPaymentFailed(
+            BottomSheetPayment(
                 imageName: "xmark.circle.fill",
                 title: "Payment Failed!",
                 message: "Something went wrong. Try again later.",

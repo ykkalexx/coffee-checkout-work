@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct BottomSheetPaymentFailed: View {
+struct BottomSheetPayment: View {
     let imageName: String
     let title: String
     let message: String
@@ -46,7 +46,7 @@ struct BottomSheetPaymentFailed: View {
     }
 }
 
-private extension BottomSheetPaymentFailed {
+private extension BottomSheetPayment {
     var imageView: some View {
         Image(systemName: imageName)
             .resizable()
