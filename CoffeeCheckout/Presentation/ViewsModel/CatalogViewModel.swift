@@ -1,10 +1,10 @@
 import Foundation
 import Combine
 
-class CatalogViewModel: ObservableObject {
-    @Published var coffees: [Coffee] = []
-    @Published var isLoading: Bool = false
-    @Published var error: String?
+@Observable class CatalogViewModel {
+    var coffees: [Coffee] = []
+    var isLoading: Bool = false
+    var error: String?
     
     private let coffeeRepository: CoffeeRepository
     private let addCoffeeToBasket: AddCoffeeToBasketUseCase

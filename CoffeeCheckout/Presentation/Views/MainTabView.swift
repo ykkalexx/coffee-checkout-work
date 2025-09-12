@@ -4,15 +4,13 @@ enum Tab {
     case menu, basket, orders
 }
 
+import SwiftUI
+
 struct MainTabView: View {
     @State private var selectedTab: Tab = .menu
-    @StateObject private var catalogViewModel: CatalogViewModel
-    @StateObject private var basketViewModel: BasketViewModel
     
-    init(catalogViewModel: CatalogViewModel, basketViewModel: BasketViewModel) {
-        _catalogViewModel = StateObject(wrappedValue: catalogViewModel)
-        _basketViewModel = StateObject(wrappedValue: basketViewModel)
-    }
+    let catalogViewModel: CatalogViewModel
+    let basketViewModel: BasketViewModel
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -20,8 +18,8 @@ struct MainTabView: View {
             basketTabView
         }
         .tint(.orange)
-        .environmentObject(catalogViewModel)
-        .environmentObject(basketViewModel)
+        .environment(catalogViewModel)
+        .environment(basketViewModel)
         .onAppear(perform: setupTabBarAppearance)
     }
 }
@@ -38,7 +36,7 @@ private extension MainTabView {
 
     var basketTabView: some View {
         NavigationStack {
-            BasketView(viewModel: basketViewModel)
+            BasketView()
         }
         .tabItem {
             Label("Basket", systemImage: "basket.fill")

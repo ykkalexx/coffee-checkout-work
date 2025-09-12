@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct YourAppNameApp: App {
+struct CoffeeCheckoutApp: App {
     private let basketRepository = InMemoryBasketRepository()
     private let coffeeRepository = MockCoffeeRepository()
     private let addCoffeeUseCase: AddCoffeeToBasketUseCase

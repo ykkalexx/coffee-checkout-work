@@ -1,9 +1,8 @@
 import SwiftUI
 
 struct CatalogView: View {
-    @EnvironmentObject private var viewModel: CatalogViewModel
-    @EnvironmentObject private var basketViewModel: BasketViewModel
-    
+    @Environment(CatalogViewModel.self) private var viewModel
+    @Environment(BasketViewModel.self) private var basketViewModel
     @State private var showingConfirmation = false
     
     var body: some View {

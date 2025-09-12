@@ -1,11 +1,12 @@
 import Foundation
 import Combine
 
-class BasketViewModel: ObservableObject {
-    @Published private(set) var basketItems: [BasketItem] = []
-    @Published private(set) var subtotal: Double = 0.0
-    @Published private(set) var total: Double = 0.0
-    @Published private(set) var totalQuantity: Int = 0
+
+@Observable class BasketViewModel {
+    private(set) var basketItems: [BasketItem] = []
+    private(set) var subtotal: Double = 0.0
+    private(set) var total: Double = 0.0
+    private(set) var totalQuantity: Int = 0
     
     let deliveryFee: Double = 5.00
     

@@ -1,10 +1,3 @@
-//
-//  BottomSheetView.swift
-//  CoffeeCheckout
-//
-//  Created by Vlad Alex Barbatescu on 10/09/2025.
-//
-
 import SwiftUI
 
 struct BottomSheetPayment: View {

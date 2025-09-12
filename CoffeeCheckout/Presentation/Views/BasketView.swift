@@ -1,11 +1,7 @@
 import SwiftUI
 
 struct BasketView: View {
-    @ObservedObject private var viewModel: BasketViewModel
-    
-    init(viewModel: BasketViewModel) {
-        self.viewModel = viewModel
-    }
+    @Environment(BasketViewModel.self) private var viewModel
     
     var body: some View {
         VStack(spacing: 0) {
@@ -133,7 +129,6 @@ private extension BasketView {
 #Preview {
     let previewRepository = InMemoryBasketRepository()
     let previewViewModel = BasketViewModel(repository: previewRepository)
-    
-    return BasketView(viewModel: previewViewModel)
-        .environmentObject(previewViewModel)
+    return BasketView()
+        .environment(previewViewModel)
 }

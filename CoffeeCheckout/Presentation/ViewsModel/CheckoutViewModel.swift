@@ -8,11 +8,11 @@ enum SheetType: Identifiable {
     var id: Self { self }
 }
 
-class CheckoutViewModel: ObservableObject {
-    @Published var paymentMethods: [PaymentMethod] = []
-    @Published var selectedPaymentMethodId: String?
+@Observable class CheckoutViewModel {
+    var paymentMethods: [PaymentMethod] = []
+    var selectedPaymentMethodId: String?
     private let paymentRepository: PaymentRepository
-    @Published var activeSheet: SheetType?
+    var activeSheet: SheetType?
 
     let title = "Select Payment Method"
     let alternativePaymentText = "Or Pay Using"

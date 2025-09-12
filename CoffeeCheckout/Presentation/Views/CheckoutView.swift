@@ -2,7 +2,7 @@ import SwiftUI
 import PassKit
 
 struct CheckoutView: View {
-    @StateObject private var viewModel = CheckoutViewModel()
+    @State private var viewModel = CheckoutViewModel()
 
     var body: some View {
         VStack(spacing: 24) {
