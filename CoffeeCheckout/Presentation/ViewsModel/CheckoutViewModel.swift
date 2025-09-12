@@ -1,14 +1,19 @@
 import SwiftUI
 import Combine
 
+enum SheetType: Identifiable {
+    case paymentSuccess
+    case paymentFailed
+
+    var id: Self { self }
+}
+
 class CheckoutViewModel: ObservableObject {
     @Published var paymentMethods: [PaymentMethod] = []
     @Published var selectedPaymentMethodId: String?
-    @Published var showingBottomSheet: Bool = false
-    @Published var isPaymentSuccessful: Bool = false
     private let paymentRepository: PaymentRepository
-    @Published var showFailedPayment: Bool = false
-    
+    @Published var activeSheet: SheetType?
+
     let title = "Select Payment Method"
     let alternativePaymentText = "Or Pay Using"
     let continueButtonText = "Continue"
@@ -28,7 +33,7 @@ class CheckoutViewModel: ObservableObject {
     }
     
     func processPayment() async {
-        guard let selectedId = selectedPaymentMethodId else {
+        guard selectedPaymentMethodId != nil else {
             print("Error: No payment method is selected.")
             return
         }
@@ -36,24 +41,22 @@ class CheckoutViewModel: ObservableObject {
         do {
             let success = try await paymentRepository.handlePayment()
             
-            await MainActor.run {                
+            await MainActor.run {
                 if success {
-                    self.continueToNextStep()
+                    self.activeSheet = .paymentSuccess
                 } else {
                     print("Payment failed.")
-                    self.showFailedPayment = true
+                    self.activeSheet = .paymentFailed
                 }
             }
         } catch {
-            print("Failed to process payment: \(error.localizedDescription)")    
+            print("Failed to process payment: \(error.localizedDescription)")
+            await MainActor.run {
+                self.activeSheet = .paymentFailed
+            }
         }
     }
     
-    
-    func continueToNextStep() {
-        showingBottomSheet = true
-    }
-          
     private func loadPaymentMethods() {
         paymentMethods = [
             PaymentMethod(id: "debit", name: "Debit Card", imageName: "creditcard.fill"),

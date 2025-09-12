@@ -13,14 +13,6 @@ struct BottomSheetPayment: View {
     let message: String
     let isSuccess: Bool
     
-    /*
-    enum Status {
-        case success
-        case failure
-        case error, warnig
-    }
-     */
-    
     init(
         imageName: String,
         title: String,

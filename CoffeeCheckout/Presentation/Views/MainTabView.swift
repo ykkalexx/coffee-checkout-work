@@ -9,49 +9,65 @@ struct MainTabView: View {
     @StateObject private var catalogViewModel: CatalogViewModel
     @StateObject private var basketViewModel: BasketViewModel
     
-    init() {
-        let basketRepository = InMemoryBasketRepository()
-        let coffeeRepository = MockCoffeeRepository()
-        let addCoffeeUseCase = AddCoffeeToBasketUseCase(repository: basketRepository)
-        let basketVM = BasketViewModel(repository: basketRepository)
-        let catalogVM = CatalogViewModel(
-            coffeeRepository: coffeeRepository,
-            addCoffeeToBasketUseCase: addCoffeeUseCase
-        )
-        
-        _basketViewModel = StateObject(wrappedValue: basketVM)
-        _catalogViewModel = StateObject(wrappedValue: catalogVM)
-        
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor.cardC
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+    init(catalogViewModel: CatalogViewModel, basketViewModel: BasketViewModel) {
+        _catalogViewModel = StateObject(wrappedValue: catalogViewModel)
+        _basketViewModel = StateObject(wrappedValue: basketViewModel)
     }
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            CatalogView()
-                .tabItem {
-                    Label("Menu", systemImage: "list.bullet")
-                }
-                .tag(Tab.menu)
-    
-            NavigationStack {
-                BasketView(viewModel: basketViewModel)
-            }
-            .tabItem {
-                Label("Basket", systemImage: "basket.fill")
-            }
-            .tag(Tab.basket)
+            menuTabView
+            basketTabView
         }
         .tint(.orange)
         .environmentObject(catalogViewModel)
         .environmentObject(basketViewModel)
+        .onAppear(perform: setupTabBarAppearance)
+    }
+}
+
+private extension MainTabView {
+
+    var menuTabView: some View {
+        CatalogView()
+            .tabItem {
+                Label("Menu", systemImage: "list.bullet")
+            }
+            .tag(Tab.menu)
+    }
+
+    var basketTabView: some View {
+        NavigationStack {
+            BasketView(viewModel: basketViewModel)
+        }
+        .tabItem {
+            Label("Basket", systemImage: "basket.fill")
+        }
+        .tag(Tab.basket)
+    }
+    
+    func setupTabBarAppearance() {
+        let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.configureWithOpaqueBackground()
+        tabBarAppearance.backgroundColor = UIColor(named: "cardC")
+        UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
 }
 
 #Preview {
-    MainTabView()
+    let basketRepository = InMemoryBasketRepository()
+    let coffeeRepository = MockCoffeeRepository()
+    let addCoffeeUseCase = AddCoffeeToBasketUseCase(repository: basketRepository)
+    
+    let basketVM = BasketViewModel(repository: basketRepository)
+    let catalogVM = CatalogViewModel(
+        coffeeRepository: coffeeRepository,
+        addCoffeeToBasketUseCase: addCoffeeUseCase
+    )
+    
+    return MainTabView(
+        catalogViewModel: catalogVM,
+        basketViewModel: basketVM
+    )
 }
-

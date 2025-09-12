@@ -6,24 +6,46 @@ struct CheckoutView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text(viewModel.title)
-                .font(.title2)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(.white)
+            headerView
+            paymentOptionsListView
+            alternativePaymentsView
+            Spacer()
+            continueButton
+        }
+        .padding()
+        .background(Color.mainBg.ignoresSafeArea())
+        .sheet(item: $viewModel.activeSheet) { sheetType in
+            paymentResultSheet(for: sheetType)
+        }
+    }
+}
 
-            VStack(spacing: 16) {
-                ForEach(viewModel.paymentMethods) { method in
-                    PaymentOptionRow(
-                        method: method,
-                        isSelected: viewModel.selectedPaymentMethodId == method.id
-                    )
-                    .onTapGesture {
-                        viewModel.selectPaymentMethod(id: method.id)
-                    }
+private extension CheckoutView {
+
+    var headerView: some View {
+        Text(viewModel.title)
+            .font(.title2)
+            .fontWeight(.bold)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(.white)
+    }
+
+    var paymentOptionsListView: some View {
+        VStack(spacing: 16) {
+            ForEach(viewModel.paymentMethods) { method in
+                PaymentOptionRow(
+                    method: method,
+                    isSelected: viewModel.selectedPaymentMethodId == method.id
+                )
+                .onTapGesture {
+                    viewModel.selectPaymentMethod(id: method.id)
                 }
             }
+        }
+    }
 
+    var alternativePaymentsView: some View {
+        VStack(spacing: 16) {
             Text(viewModel.alternativePaymentText)
                 .foregroundColor(.gray)
                 .font(.subheadline)
@@ -31,41 +53,39 @@ struct CheckoutView: View {
             PayWithApplePayButton(action: viewModel.handleApplePay)
                 .cornerRadius(12)
                 .frame(height: 60)
-            
-            Spacer()
-
-            OrangeButton(action: {
-                Task {
-                    await viewModel.processPayment()
-                }
-            }) {
-                Text(viewModel.continueButtonText)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .foregroundColor(.white)
-            }
         }
-        .padding()
-        .background(Color.mainBg)
-        .sheet(isPresented: $viewModel.showingBottomSheet) {
-            
+    }
+
+    var continueButton: some View {
+        Button(action: {
+            Task { await viewModel.processPayment() }
+        }) {
+            Text(viewModel.continueButtonText)
+                .frame(maxWidth: .infinity) 
+        }
+        .buttonStyle(OrangeButtonStyle())
+    }
+    
+    @ViewBuilder
+    func paymentResultSheet(for sheetType: SheetType) -> some View {
+        switch sheetType {
+        case .paymentSuccess:
             BottomSheetPayment(
                 imageName: "checkmark.circle.fill",
-                title: "Payment Succesful!",
+                title: "Payment Successful!",
                 message: "Your order has been placed successfully.",
                 isSuccess: true
-                
             )
-                .presentationDetents([.height(200),])
-        }
-        .sheet(isPresented: $viewModel.showFailedPayment ) {
+            .presentationDetents([.height(200)])
+            
+        case .paymentFailed:
             BottomSheetPayment(
                 imageName: "xmark.circle.fill",
                 title: "Payment Failed!",
                 message: "Something went wrong. Try again later.",
                 isSuccess: false
             )
-                .presentationDetents([.height(200),])
+            .presentationDetents([.height(200)])
         }
     }
 }
@@ -74,4 +94,5 @@ struct CheckoutView: View {
     NavigationView {
         CheckoutView()
     }
+    .preferredColorScheme(.dark)
 }
