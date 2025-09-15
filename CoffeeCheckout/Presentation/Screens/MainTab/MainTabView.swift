@@ -1,26 +1,20 @@
 import SwiftUI
 
-enum Tab {
-    case menu, basket, orders
-}
-
-import SwiftUI
-
 struct MainTabView: View {
-    @State private var selectedTab: Tab = .menu
-    
-    let catalogViewModel: CatalogViewModel
-    let basketViewModel: BasketViewModel
+    @State private var viewModel: MainTabViewModel
+    init(viewModel: MainTabViewModel) {
+        self._viewModel = State(initialValue: viewModel)
+    }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $viewModel.selectedTab) {
             menuTabView
             basketTabView
         }
         .tint(.orange)
-        .environment(catalogViewModel)
-        .environment(basketViewModel)
-        .onAppear(perform: setupTabBarAppearance)
+        .environment(viewModel.catalogViewModel)
+        .environment(viewModel.basketViewModel)
+        .onAppear(perform: viewModel.setupTabBarAppearance)
     }
 }
 
@@ -30,7 +24,7 @@ private extension MainTabView {
             .tabItem {
                 Label("Menu", systemImage: "list.bullet")
             }
-            .tag(Tab.menu)
+            .tag(MainTabViewModel.Tab.menu)
     }
 
     var basketTabView: some View {
@@ -40,15 +34,7 @@ private extension MainTabView {
         .tabItem {
             Label("Basket", systemImage: "basket.fill")
         }
-        .tag(Tab.basket)
-    }
-    
-    func setupTabBarAppearance() {
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.configureWithOpaqueBackground()
-        tabBarAppearance.backgroundColor = UIColor(named: "cardC")
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
+        .tag(MainTabViewModel.Tab.basket)
     }
 }
 
@@ -56,15 +42,14 @@ private extension MainTabView {
     let basketRepository = InMemoryBasketRepository()
     let coffeeRepository = MockCoffeeRepository()
     let addCoffeeUseCase = AddCoffeeToBasketUseCase(repository: basketRepository)
-    
     let basketVM = BasketViewModel(repository: basketRepository)
     let catalogVM = CatalogViewModel(
         coffeeRepository: coffeeRepository,
         addCoffeeToBasketUseCase: addCoffeeUseCase
     )
-    
-    return MainTabView(
+    let mainTabVM = MainTabViewModel(
         catalogViewModel: catalogVM,
         basketViewModel: basketVM
     )
+    return MainTabView(viewModel: mainTabVM)
 }
