@@ -25,7 +25,6 @@ struct MainTabView: View {
 }
 
 private extension MainTabView {
-
     var menuTabView: some View {
         CatalogView()
             .tabItem {

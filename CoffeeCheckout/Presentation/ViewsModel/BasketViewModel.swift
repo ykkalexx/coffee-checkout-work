@@ -1,7 +1,6 @@
 import Foundation
 import Combine
 
-
 @Observable class BasketViewModel {
     private(set) var basketItems: [BasketItem] = []
     private(set) var subtotal: Double = 0.0
@@ -9,6 +8,10 @@ import Combine
     private(set) var totalQuantity: Int = 0
     
     let deliveryFee: Double = 5.00
+    let headerText: String = "Basket"
+    let emptyBasketText: String = "Your basket is empty"
+    let summaryViewText: [String] = ["Subtotal", "Delivery", "Total"]
+    let checkoutButtonText: String = "Proceed to checkout"
     
     private let repository: BasketRepository
     private let addCoffeeToBasket: AddCoffeeToBasketUseCase
@@ -17,6 +20,18 @@ import Combine
     private let emptyBasket: EmptyBasketUseCase
     
     private var cancellables = Set<AnyCancellable>()
+    
+    var subtotalFormatted: String {
+        return formatAsCurrency(subtotal)
+    }
+    
+    var deliveryFeeFormatted: String {
+        return formatAsCurrency(deliveryFee)
+    }
+    
+    var totalFormatted: String {
+        return formatAsCurrency(total)
+    }
 
     init(repository: BasketRepository) {
         self.repository = repository
@@ -60,5 +75,14 @@ import Combine
         self.subtotal = items.reduce(0) { $0 + ($1.coffee.price * Double($1.quantity)) }
         self.total = self.subtotal + self.deliveryFee
         self.totalQuantity = items.reduce(0) { $0 + $1.quantity }
+    }
+    
+    private func formatAsCurrency(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencySymbol = fetchLocalCurrency()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter.string(from: NSNumber(value: value)) ?? "€0.00"
     }
 }

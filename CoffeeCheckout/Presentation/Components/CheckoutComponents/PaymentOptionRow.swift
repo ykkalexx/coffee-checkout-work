@@ -25,7 +25,6 @@ struct PaymentOptionRow: View {
 }
 
 private extension PaymentOptionRow {
-
     var iconView: some View {
         Image(systemName: method.imageName)
             .font(.title2)

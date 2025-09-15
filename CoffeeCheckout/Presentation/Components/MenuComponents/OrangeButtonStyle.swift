@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct OrangeButtonStyle: ButtonStyle {
-    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor(.white)
@@ -14,5 +13,4 @@ struct OrangeButtonStyle: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
-    
 }

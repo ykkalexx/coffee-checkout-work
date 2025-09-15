@@ -2,13 +2,13 @@ import SwiftUI
 
 struct BasketButtonStyle: ButtonStyle {
     let quantity: Int
-
+    
     func makeBody(configuration: Configuration) -> some View {
         ZStack(alignment: .topTrailing) {
             Image(systemName: "basket.fill")
                 .font(.title2)
                 .foregroundColor(.white)
-
+            
             if quantity > 0 {
                 Text("\(quantity)")
                     .font(.caption2)

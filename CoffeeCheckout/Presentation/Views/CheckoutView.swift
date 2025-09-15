@@ -3,7 +3,7 @@ import PassKit
 
 struct CheckoutView: View {
     @State private var viewModel = CheckoutViewModel()
-
+    
     var body: some View {
         VStack(spacing: 24) {
             headerView
@@ -21,7 +21,6 @@ struct CheckoutView: View {
 }
 
 private extension CheckoutView {
-
     var headerView: some View {
         Text(viewModel.title)
             .font(.title2)
@@ -29,7 +28,7 @@ private extension CheckoutView {
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(.white)
     }
-
+    
     var paymentOptionsListView: some View {
         VStack(spacing: 16) {
             ForEach(viewModel.paymentMethods) { method in
@@ -43,7 +42,7 @@ private extension CheckoutView {
             }
         }
     }
-
+    
     var alternativePaymentsView: some View {
         VStack(spacing: 16) {
             Text(viewModel.alternativePaymentText)
@@ -55,13 +54,13 @@ private extension CheckoutView {
                 .frame(height: 60)
         }
     }
-
+    
     var continueButton: some View {
         Button(action: {
             Task { await viewModel.processPayment() }
         }) {
             Text(viewModel.continueButtonText)
-                .frame(maxWidth: .infinity) 
+                .frame(maxWidth: .infinity)
         }
         .buttonStyle(OrangeButtonStyle())
     }

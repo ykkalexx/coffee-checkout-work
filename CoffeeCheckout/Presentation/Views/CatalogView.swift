@@ -39,7 +39,7 @@ private extension CatalogView {
         }
         .padding()
     }
-
+    
     var contentView: some View {
         ScrollView {
             coffeeList

@@ -27,3 +27,4 @@ struct CoffeeCheckoutApp: App {
         }
     }
 }
+

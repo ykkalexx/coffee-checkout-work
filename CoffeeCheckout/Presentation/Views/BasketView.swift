@@ -12,11 +12,10 @@ struct BasketView: View {
     }
 }
 
-
 private extension BasketView {
     var headerView: some View {
         HStack {
-            Text("Basket")
+            Text(viewModel.headerText)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
@@ -33,11 +32,11 @@ private extension BasketView {
             basketContentsView
         }
     }
-
+    
     var emptyBasketView: some View {
         VStack {
             Spacer()
-            Text("Your basket is empty")
+            Text(viewModel.emptyBasketText)
                 .foregroundColor(.gray)
                 .font(.title3)
             Spacer()
@@ -51,7 +50,7 @@ private extension BasketView {
             checkoutButton
         }
     }
-
+    
     var basketListView: some View {
         ScrollView {
             ForEach(viewModel.basketItems) { item in
@@ -76,28 +75,28 @@ private extension BasketView {
     var summaryView: some View {
         VStack(spacing: 15) {
             HStack {
-                Text("Subtotal")
+                Text(viewModel.summaryViewText[0])
                 Spacer()
-                Text("€\(viewModel.subtotal, specifier: "%.2f")")
+                Text(viewModel.subtotalFormatted)
                     .fontWeight(.semibold)
             }
             
             HStack {
-                Text("Delivery")
+                Text(viewModel.summaryViewText[1])
                 Spacer()
-                Text("€\(viewModel.deliveryFee, specifier: "%.2f")")
+                Text(viewModel.deliveryFeeFormatted)
                     .fontWeight(.semibold)
             }
-
+            
             Divider().background(Color.white.opacity(0.5))
-
+            
             HStack {
-                Text("Total")
+                Text(viewModel.summaryViewText[2])
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.orange)
                 Spacer()
-                Text("€\(viewModel.total, specifier: "%.2f")")
+                Text(viewModel.totalFormatted)
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundColor(.orange)
@@ -114,7 +113,7 @@ private extension BasketView {
         Button(action: {
             print("going to checkout")
         }) {
-            Text("Proceed to Checkout")
+            Text(viewModel.checkoutButtonText)
                 .frame(maxWidth: .infinity)
                 .padding()
                 .background(Color.orange)

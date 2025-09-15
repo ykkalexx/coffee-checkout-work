@@ -5,7 +5,7 @@ struct CardView: View {
     let description: String
     let price: String
     let action: () -> Void
-
+    
     init(
         title: String,
         description: String,
@@ -25,9 +25,9 @@ struct CardView: View {
                 descriptionView
                 priceView
             }
-
+            
             Spacer()
-
+            
             buttonView
         }
     }
