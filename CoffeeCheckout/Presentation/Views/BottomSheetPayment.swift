@@ -1,25 +1,10 @@
-//
-//  BottomSheetView.swift
-//  CoffeeCheckout
-//
-//  Created by Vlad Alex Barbatescu on 10/09/2025.
-//
-
 import SwiftUI
 
-struct BottomSheetPaymentFailed: View {
+struct BottomSheetPayment: View {
     let imageName: String
     let title: String
     let message: String
     let isSuccess: Bool
-    
-    /*
-    enum Status {
-        case success
-        case failure
-        case error, warnig
-    }
-     */
     
     init(
         imageName: String,
@@ -46,7 +31,7 @@ struct BottomSheetPaymentFailed: View {
     }
 }
 
-private extension BottomSheetPaymentFailed {
+private extension BottomSheetPayment {
     var imageView: some View {
         Image(systemName: imageName)
             .resizable()
